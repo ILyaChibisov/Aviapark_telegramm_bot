@@ -20,7 +20,7 @@ BAR_NAME = ['Въезд 101', 'Въезд 102', 'Въезд 105', 'Въезд 10
             'Выезд 209', 'Выезд 210', 'Выезд 211', 'Выезд 212', "Чистка всех корзин", "Главное меню"]
 
 COMMAND_TERM = ["Перезагузка кассы", "Сброс денег", "Загрузка денег", "Перезагрузкака Btb", "Комманда 94",
-                "Отправить Z-отчёт ", "Отправить X-отчёт", "Сброс Ошибок (*07)", "Выход CL+D", "Поменять раскладку",
+                "Отправить Z-отчёт ", "Отправить X-отчёт 63*02", "Сброс Ошибок (*07)", "Выход CL+D", "Поменять раскладку",
                 "Главное меню"]
 COMMAND_BAR = ["Перезагузка стойки", "Заблокировать", "Разблокировать", "Открыть", "Закрыть", "Не работает",
                "Работает", "Сброс билетов", "Команда 94", "Главное меню"]
@@ -37,13 +37,13 @@ bot.set_webhook()
 
 @bot.message_handler(commands=['start'])
 def start(message):
-    bot.send_message(message.chat.id, 'Приветствую тебя ' + message.from_user.username + '!')
     clients_bot = users.read_users()
     adm = [ADM_USER, ]  # список из id пользователей
     for user in clients_bot:
         adm.append(user)
-    if message.from_user.username in clients_bot or message.from_user.username not in adm:
-
+    if message.from_user.username == ADM_USER or message.from_user.username in clients_bot:
+        mess = 'Приветствую тебя ' + message.from_user.username + ' пользователь!'
+        bot.send_message(message.chat.id, mess)
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
         btn1 = types.KeyboardButton(" Кассы ")
         btn2 = types.KeyboardButton(" Стойки ")
@@ -52,6 +52,10 @@ def start(message):
         bot.send_message(message.chat.id,
                          text="Главное меню!".format(message.from_user),
                          reply_markup=markup)
+
+    if message.from_user.username not in clients_bot:
+        mess = 'Приветствую тебя пользователь ' + message.from_user.username + '  ! Отправьте заявку на вступление в бота разработчику @' + ADM_USER
+        bot.send_message(message.chat.id, mess)
 
 
 # Главное меню
@@ -121,48 +125,76 @@ def get_user_text(message):
         # прописываем команды устройств
         # 1.0 перезагрузка кассовых терминалов
         elif message.text == COMMAND_TERM[0]:
+            mess = "Устройство " + str(device) + " Устройство перезагружено, пользователь: " + message.from_user.username
+            bot.send_message(1422691786, mess)
             devices.terminal_device(device)
             bot.send_message(message.chat.id, "Устройство перезагружено")
+            bot.send_message(1422691786, "Действие завершено!")
 
         # 1.1 сброс денег
         elif message.text == COMMAND_TERM[1]:
+            mess = "Устройство " + str(device) + " Деньги сбрасываются, пользователь: " + message.from_user.username
+            bot.send_message(1422691786, mess)
             devices.money_down_reset(device)
             bot.send_message(message.chat.id, "Деньги сбрасываются...")
+            bot.send_message(1422691786, "Действие завершено!")
+
 
         # 2.1 докладка денег
         elif message.text == COMMAND_TERM[2]:
+            mess = "Устройство " + str(device) + " Докладывайте деньги, пользователь: " + message.from_user.username
+            bot.send_message(1422691786, mess)
             devices.money_up_reset(device)
             bot.send_message(message.chat.id, "Докладывайте деньги!")
+            bot.send_message(1422691786, "Действие завершено!")
 
         # 3.1 перезагрузка билда
         elif message.text == COMMAND_TERM[3]:
+            mess = "Устройство " + str(device) + " Перезагружается btb, пользователь: " + message.from_user.username
+            bot.send_message(1422691786, mess)
             devices.bild_reset(device)
             bot.send_message(message.chat.id, "Перезагружается btb")
+            bot.send_message(1422691786, "Действие завершено!")
 
         # 4.1 команда 94
         elif message.text == COMMAND_TERM[4]:
+            mess = "Устройство " + str(device) + " Команда 94 выполняется, пользователь: " + message.from_user.username
+            bot.send_message(1422691786, mess)
             devices.term_94(device)
             bot.send_message(message.chat.id, "Команда 94 выполняется!")
+            bot.send_message(1422691786, "Действие завершено!")
 
         # 5.1 z
         elif message.text == COMMAND_TERM[5]:
+            mess = "Устройство " + str(device) + " Z отчёт отправлен, пользователь: " + message.from_user.username
+            bot.send_message(1422691786, mess)
             devices.z_report(device)
             bot.send_message(message.chat.id, "Z отчёт отправлен!")
+            bot.send_message(1422691786, "Действие завершено!")
 
         # 6.1 x
         elif message.text == COMMAND_TERM[6]:
+            mess = "Устройство " + str(device) + " X отчёт отправлен, пользователь: " + message.from_user.username
+            bot.send_message(1422691786, mess)
             devices.x_report(device)
             bot.send_message(message.chat.id, "X отчёт отправлен!")
+            bot.send_message(1422691786, "Действие завершено!")
 
         # 7. сброс ошибок 07
         elif message.text == COMMAND_TERM[7]:
+            mess = "Устройство " + str(device) + " Ошибки сброшены, пользователь: " + message.from_user.username
+            bot.send_message(1422691786, mess)
             devices.comm_07(device)
             bot.send_message(message.chat.id, "Ошибки сброшены")
+            bot.send_message(1422691786, "Действие завершено!")
 
         # 8. CL+D
         elif message.text == COMMAND_TERM[8]:
+            mess = "Устройство " + str(device) + " вышло из тех. режима пользователь:" + message.from_user.username
+            bot.send_message(1422691786, mess)
             devices.cl_d(device)
             bot.send_message(message.chat.id, "Выход из технического режима")
+            bot.send_message(1422691786, "Действие завершено!")
 
         # 9. англ раскладка клавиатуры
         elif message.text == COMMAND_TERM[9]:
@@ -176,14 +208,18 @@ def get_user_text(message):
             markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
             for bar in BAR_NAME:
                 markup.add(bar)
-            bot.send_message(message.chat.id, 'Выберите терминал', reply_markup=markup)
+            bot.send_message(message.chat.id, 'Выбер'
+                                              'ите терминал', reply_markup=markup)
 
         elif message.text == "Чистка всех корзин":
+            mess = "Устройство " + str(device) + " Идёт сброс билетов на всех стойках, пользователь:" + message.from_user.username
+            bot.send_message(1422691786, mess)
             bot.send_message(message.chat.id, 'Идёт сброс билетов на всех стойках...')
             exits_bar = BAR[10:]
             for bar in exits_bar:
                 devices.reset_tickets(bar)
             bot.send_message(message.chat.id, 'Сброс билетов завершен!')
+            bot.send_message(1422691786, "Действие завершено!")
 
         elif message.text in BAR_NAME:
             devices.test_pglsvrem()
@@ -201,54 +237,84 @@ def get_user_text(message):
         # прописываем команды стоек
         # 2.0 перезагрузка стоек
         elif message.text == COMMAND_BAR[0]:
+            mess = "Устройство " + str(barier) + " Устройство перезагружено, пользователь:" + message.from_user.username
+            bot.send_message(1422691786, mess)
             devices.barrier_device(barier)
             bot.send_message(message.chat.id, "Устройство перезагружено")
+            bot.send_message(1422691786, "Действие завершено!")
 
         # 2.1 заблокировать
         elif message.text == COMMAND_BAR[1]:
+            mess = "Устройство " + str(barier) + " Устройство заблокировано, пользователь:" + message.from_user.username
+            bot.send_message(1422691786, mess)
             devices.block_bar(barier)
             bot.send_message(message.chat.id, "Устройство заблокировано")
+            bot.send_message(1422691786, "Действие завершено!")
 
         # 2.2 разблокировать
         elif message.text == COMMAND_BAR[2]:
+            mess = "Устройство " + str(barier) + " Устройство разблокировано, пользователь:" + message.from_user.username
+            bot.send_message(1422691786, mess)
             devices.un_block_bar(barier)
             bot.send_message(message.chat.id, "Устройство разблокировано")
+            bot.send_message(1422691786, "Действие завершено!")
 
         # 2.4 открыть
         elif message.text == COMMAND_BAR[3]:
+            mess = "Устройство " + str(barier) + " Устройство открыто, пользователь:" + message.from_user.username
+            bot.send_message(1422691786, mess)
             devices.open_bar(barier)
             bot.send_message(message.chat.id, "Устройство открыто")
+            bot.send_message(1422691786, "Действие завершено!")
 
         # 2.5 закрыть
         elif message.text == COMMAND_BAR[4]:
+            mess = "Устройство " + str(barier) + " Устройство закрыто, пользователь:" + message.from_user.username
+            bot.send_message(1422691786, mess)
             devices.close_bar(barier)
             bot.send_message(message.chat.id, "Устройство закрыто")
+            bot.send_message(1422691786, "Действие завершено!")
 
         # 2.6 не работает
         elif message.text == COMMAND_BAR[5]:
+            mess = "Устройство " + str(barier) + " Устройство  не работает, пользователь:" + message.from_user.username
+            bot.send_message(1422691786, mess)
             devices.not_work_bar(barier)
             bot.send_message(message.chat.id, "Устройство  не работает")
+            bot.send_message(1422691786, "Действие завершено!")
 
         # 2.7 работает
         elif message.text == COMMAND_BAR[6]:
+            mess = "Устройство " + str(barier) + " Устройство в работе, пользователь:" + message.from_user.username
+            bot.send_message(1422691786, mess)
             devices.work_bar(barier)
             bot.send_message(message.chat.id, "Устройство в работе")
+            bot.send_message(1422691786, "Действие завершено!")
 
 
         # 2.8 сброс стоек
         elif message.text == COMMAND_BAR[7]:
+            mess = "Устройство " + str(barier) + " Билеты сброшены, пользователь:" + message.from_user.username
+            bot.send_message(1422691786, mess)
             devices.reset_tickets(barier)
             bot.send_message(message.chat.id, "Билеты сброшены")
+            bot.send_message(1422691786, "Действие завершено!")
 
 
             # 2.9 команда 94
         elif message.text == COMMAND_BAR[8]:
+            mess = "Устройство " + str(barier) + " Команда 94 выполняется, пользователь:" + message.from_user.username
+            bot.send_message(1422691786, mess)
             devices.command_94(barier)
             bot.send_message(message.chat.id, "Команда 94 выполняется... По завершении перезагрузите стойку!")
+            bot.send_message(1422691786, "Действие завершено!")
 
         else:
             mess = "Ошибочка вышла, товарищ! "
             bot.send_message(message.chat.id, mess)
+
+    else:
+        bot.send_message(message.chat.id, 'Отправьте заявку на вступление в бота разработчику @' + ADM_USER)
 
 
 def reboot(message):
